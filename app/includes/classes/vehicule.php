@@ -41,9 +41,17 @@ class Vehicle{
     } 
 
     public static function getById($conn, $id){
-    $stmt = $conn->prepare("SELECT * FROM vehicules WHERE  id_vehicule = ?");
-    $stmt->execute([$id]);
+    $stmt = $conn->prepare("SELECT * FROM vehicules WHERE  id_vehicule = :id");
+    $stmt->execute([':id'=>$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+public static function getvehiculesParCategorie($conn,$id){
+    $sql="SELECT * FROM vehicules WHERE id_categorie=:id";
+    $stm=$conn->prepare($sql);
+  $stm->execute([':id'=>$id]);
+  return $stm->fetchAll(PDO::FETCH_ASSOC);
 }
      
 

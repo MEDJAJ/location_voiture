@@ -1,3 +1,18 @@
+
+<?php
+require_once '../../../includes/config.php';
+require_once '../../../includes/function.php';
+require_once '../../../includes/classes/reservation.php';
+
+$reservations=Reservation::afficherReservations($conn);
+
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -98,97 +113,92 @@
             </thead>
             <tbody class="divide-y divide-slate-50">
 
+            <?php
+if(count($reservations)>0){
+foreach($reservations as $reservation){
+
+            ?>
                 <tr class="hover:bg-indigo-50/30 transition-all group">
                     <td class="p-6">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">A</div>
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold"><?= $reservation['nom'][0] ?></div>
                             <div>
-                                <p class="font-bold text-slate-800">Ali Bensala</p>
-                                <p class="text-xs text-slate-400">ali@email.com</p>
+                                <p class="font-bold text-slate-800"><?= $reservation['nom'] ?></p>
+                                <p class="text-xs text-slate-400"><?= $reservation['email'] ?></p>
                             </div>
                         </div>
                     </td>
-                    <td class="p-6 font-semibold text-slate-700">BMW X5 <span class="text-xs text-slate-400 block font-normal">SUV Premium</span></td>
+                    <td class="p-6 font-semibold text-slate-700"><?= $reservation['marque'] ?><span class="text-xs text-slate-400 block font-normal"><?= $reservation['modele'] ?></span></td>
                     <td class="p-6 text-sm">
                         <div class="flex items-center gap-2 text-slate-600 font-medium">
                             <i class="far fa-calendar-alt text-indigo-400"></i>
-                            12/07 <i class="fas fa-arrow-right text-[10px] text-slate-300"></i> 15/07
+                            <?= $reservation['dateDebut'] ?> <i class="fas fa-arrow-right text-[10px] text-slate-300"></i> <?= $reservation['dateFin'][0] ?>
                         </div>
                     </td>
+                    <?php  if($reservation['status']=="confirmée"){
+
+                     ?>
+                          <td class="p-6">
+                        <span class="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1.5 rounded-lg border border-emerald-100">
+                           <i class="fas fa-check-circle mr-1"></i> VALIDÉE
+                        </span>
+                    </td>
+                    <?php  }else{
+
+                     ?>
                     <td class="p-6">
                         <span class="bg-orange-50 text-orange-600 text-[10px] font-black px-3 py-1.5 rounded-lg border border-orange-100">
                            <i class="fas fa-clock mr-1"></i> EN ATTENTE
                         </span>
                     </td>
+                    <?php   } 
+                    
+                        if($reservation['status']=="confirmée"){
+
+                 
+                    ?>
                     <td class="p-6 text-right">
                         <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                            <button title="Valider" class="w-9 h-9 flex items-center justify-center bg-emerald-500 text-white rounded-xl hover:shadow-lg transition-all">
-                                <i class="fas fa-check text-xs"></i>
-                            </button>
-                            <button title="Modifier" class="w-9 h-9 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+                        
+                          <a href="modifierReservation.php?id=<?= $reservation['id_reservation'] ?>">
+                              <button title="Modifier" class="w-9 h-9 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
                                 <i class="fas fa-pen text-xs"></i>
                             </button>
-                            <button title="Annuler" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                          </a>
+                            <a href="supprimerReservation.php?id=<?= $reservation['id_reservation'] ?>">
+                                <button title="Annuler" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">
                                 <i class="fas fa-times text-xs"></i>
                             </button>
+                            </a>
                         </div>
                     </td>
-                </tr>
+                    <?php   }else{
 
-                <tr class="hover:bg-indigo-50/30 transition-all group">
-                    <td class="p-6">
-                        <div class="flex items-center gap-3">
-                            <img src="https://ui-avatars.com/api/?name=Sara+L&background=f472b6&color=fff" class="w-10 h-10 rounded-full">
-                            <div>
-                                <p class="font-bold text-slate-800">Sara Lmine</p>
-                                <p class="text-xs text-slate-400">sara@email.com</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-6 font-semibold text-slate-700">Audi A4 <span class="text-xs text-slate-400 block font-normal">Berline Luxe</span></td>
-                    <td class="p-6 text-sm">
-                        <div class="flex items-center gap-2 text-slate-600 font-medium">
-                            <i class="far fa-calendar-alt text-indigo-400"></i>
-                            10/07 <i class="fas fa-arrow-right text-[10px] text-slate-300"></i> 13/07
-                        </div>
-                    </td>
-                    <td class="p-6">
-                        <span class="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1.5 rounded-lg border border-emerald-100">
-                           <i class="fas fa-check-circle mr-1"></i> VALIDÉE
-                        </span>
-                    </td>
+                     ?>
                     <td class="p-6 text-right">
                         <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                            <button class="w-9 h-9 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+                            <a href="changerStatusReservation.php?id=<?=$reservation['id_reservation'] ?>">
+                                <button title="Valider" class="w-9 h-9 flex items-center justify-center bg-emerald-500 text-white rounded-xl hover:shadow-lg transition-all">
+                                <i class="fas fa-check text-xs"></i>
+                            </button>
+                            </a>
+                            <a href="modifierReservation.php?id=<?= $reservation['id_reservation'] ?>">
+                                <button title="Modifier" class="w-9 h-9 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
                                 <i class="fas fa-pen text-xs"></i>
                             </button>
+                            </a>
+                            
+                            <a href="supprimerReservation.php?id=<?= $reservation['id_reservation'] ?>">
+                                <button title="Annuler" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                            </a>
                         </div>
                     </td>
+                    <?php  } ?>
                 </tr>
-
-                 <tr class="hover:bg-indigo-50/30 transition-all group">
-                    <td class="p-6 text-slate-400">
-                        <div class="flex items-center gap-3 grayscale">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold">O</div>
-                            <div>
-                                <p class="font-bold">Omar Idrissi</p>
-                                <p class="text-xs">omar@email.com</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-6 font-semibold text-slate-400 italic">Peugeot 208</td>
-                    <td class="p-6 text-sm text-slate-400 italic">05/07 - 07/07</td>
-                    <td class="p-6">
-                        <span class="bg-slate-100 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg border border-slate-200">
-                           <i class="fas fa-ban mr-1"></i> ANNULÉE
-                        </span>
-                    </td>
-                    <td class="p-6 text-right">
-                        <button class="w-9 h-9 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl ml-auto">
-                            <i class="fas fa-redo text-xs"></i>
-                        </button>
-                    </td>
-                </tr>
+<?php  }  } ?>
+               
 
             </tbody>
         </table>

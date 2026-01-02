@@ -1,3 +1,20 @@
+<?php
+require_once '../../../includes/config.php';
+require_once '../../../includes/classes/avis.php';
+
+
+$avis=Avis::afficherAvis($conn);
+
+
+?>
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -133,67 +150,120 @@
 
     <div class="grid grid-cols-1 gap-6">
 
+
+<?php
+if(count($avis)>0){
+
+foreach($avis as $avi){
+
+
+if($avi['deleted_at']==1){
+
+
+
+?>
+
+
+
         <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 flex flex-wrap md:flex-nowrap gap-6 items-center group">
             <div class="flex-shrink-0">
                 <div class="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-2xl font-black shadow-inner">
-                    M
+                    <?=  $avi['nom'][0]   ?>
                 </div>
             </div>
             
             <div class="flex-1">
                 <div class="flex items-center gap-3 mb-1">
-                    <h4 class="font-bold text-lg text-slate-800">Mohamed El Alami</h4>
+                    <h4 class="font-bold text-lg text-slate-800"><?= $avi['nom'] ?></h4>
                     <span class="bg-emerald-50 text-emerald-600 text-[10px] font-black px-2 py-1 rounded-md border border-emerald-100">VISIBLE</span>
                 </div>
-                <p class="text-xs font-bold text-indigo-500 uppercase tracking-tighter mb-2">Loué : BMW X5 Premium</p>
+                <p class="text-xs font-bold text-indigo-500 uppercase tracking-tighter mb-2">Loué : <?= $avi['modele']."  -- ".$avi['marque'] ?></p>
                 <div class="flex text-yellow-400 text-xs mb-3">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <?php
+if($avi['note']==1){
+echo "⭐";
+}elseif($avi['note']==2){
+    echo "⭐⭐";
+}elseif($avi['note']==3){
+    echo "⭐⭐⭐";
+}elseif($avi['note']==4){
+    echo "⭐⭐⭐⭐";
+}else{
+     echo "⭐⭐⭐⭐⭐";
+}
+
+?>
                 </div>
                 <p class="text-slate-600 text-sm italic leading-relaxed">
-                    "Véhicule dans un état irréprochable. L'accueil à l'agence était parfait et le processus de retour très rapide. Je recommande !"
+                    <?=  $avi['content'] ?>
                 </p>
             </div>
 
             <div class="flex md:flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                <button title="Modifier" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+                <a href="modifier_avi.php?id=<?=  $avi['id_avis'] ?>">
+                    <button title="Modifier" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
                     <i class="fas fa-edit text-sm"></i>
                 </button>
-                <button title="Supprimer" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                </a>
+
+                <a href="supprimer_avi.php?id=<?=  $avi['id_avis'] ?>">
+                    <button title="Supprimer" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
                     <i class="fas fa-trash-alt text-sm"></i>
                 </button>
+                </a>
+                
             </div>
         </div>
 
-        <div class="bg-white/60 p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-wrap md:flex-nowrap gap-6 items-center group relative overflow-hidden">
-            <div class="absolute inset-0 bg-slate-50/40 pointer-events-none"></div>
-            
-            <div class="flex-shrink-0 z-10">
-                <img src="https://ui-avatars.com/api/?name=Sara+K&background=f472b6&color=fff" class="w-16 h-16 rounded-2xl shadow-md">
-            </div>
-            
-            <div class="flex-1 z-10">
-                <div class="flex items-center gap-3 mb-1">
-                    <h4 class="font-bold text-lg text-slate-500 tracking-tight">Sara Kasmi</h4>
-                    <span class="bg-slate-200 text-slate-500 text-[10px] font-black px-2 py-1 rounded-md">MASQUÉ</span>
-                </div>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter mb-2">Loué : Audi A4 S-Line</p>
-                <div class="flex text-yellow-400/50 text-xs mb-3">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star text-slate-300"></i>
-                </div>
-                <p class="text-slate-400 text-sm italic leading-relaxed">
-                    "Bon service globalement, mais j'aurais aimé avoir le plein d'essence au départ comme convenu."
-                </p>
-            </div>
+        <?php   }else{
 
-            <div class="flex md:flex-col gap-2 z-10">
-                <button title="Rendre visible" class="w-10 h-10 flex items-center justify-center bg-emerald-50 text-emerald-500 rounded-xl hover:bg-emerald-500 hover:text-white transition-all">
-                    <i class="fas fa-eye text-sm"></i>
-                </button>
-                <button title="Supprimer" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                    <i class="fas fa-trash-alt text-sm"></i>
-                </button>
-            </div>
+        ?>
+
+
+
+
+ <div class="bg-gray-200 text-gray-400 p-6 rounded-[2rem] shadow-sm border border-gray-300 flex flex-wrap md:flex-nowrap gap-6 items-center pointer-events-none">
+    <div class="flex-shrink-0">
+        <div class="w-16 h-16 rounded-2xl bg-gray-300 flex items-center justify-center text-gray-500 text-2xl font-black shadow-inner">
+            <?= $avi['nom'][0] ?>
         </div>
+    </div>
+
+    <div class="flex-1">
+        <div class="flex items-center gap-3 mb-1">
+            <h4 class="font-bold text-gray-500 text-lg"><?= $avi['nom'] ?></h4>
+            <span class="bg-gray-400 text-white text-[10px] font-black px-2 py-1 rounded-md border border-gray-300">MASQUÉ</span>
+        </div>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-tighter mb-2">
+            Loué : <?= $avi['modele']."  --  ".$avi['marque'] ?>
+        </p>
+        <div class="flex text-yellow-300 text-xs mb-3">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="text-gray-500 text-sm italic leading-relaxed">
+            <?= $avi['content'] ?>
+        </p>
+    </div>
+
+    <div class="flex md:flex-col gap-2 opacity-100 pointer-events-auto">
+        <a href="supprimer_avi.php?id=<?=  $avi['id_avis'] ?>">
+               <button title="Supprimer" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+            <i class="fas fa-trash-alt text-sm"></i>
+        </button>
+        </a>
+     
+    </div>
+</div>
+
+
+
+
+
+<?php  }}  }  ?>
+
+     
+
+
 
     </div>
 </main>

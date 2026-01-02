@@ -95,9 +95,9 @@ INSERT INTO vehicules (modele, marque, disponibilite, id_categorie) VALUES
 
 
 INSERT INTO reservations (dateDebut, dateFin, lieuPrise, status, id_user, id_vehicule) VALUES
-('2026-01-05 09:00:00', '2026-01-10 18:00:00', 'Aéroport Tunis', 'confirmée', 1, 1),
-('2026-01-15 10:00:00', '2026-01-18 12:00:00', 'Centre-ville', 'en attente', 2, 2),
-('2026-01-20 08:00:00', '2026-01-25 20:00:00', 'Agence Lac', 'annulée', 1, 3);
+('2026-01-05 09:00:00', '2026-01-10 18:00:00', 'Aéroport Tunis', 'confirmée', 1, 4),
+('2026-01-15 10:00:00', '2026-01-18 12:00:00', 'Centre-ville', 'en attente', 2, 5),
+('2026-01-20 08:00:00', '2026-01-25 20:00:00', 'Agence Lac', 'annulée', 1, 4);
 
 
 INSERT INTO avis (note, content, status, id_user, id_vehicule) VALUES
