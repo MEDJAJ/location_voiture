@@ -47,6 +47,27 @@ public function modifierAvis($conn,$id){
     ]);
 }
 
+public static function getAvisParVehicule($conn,$id){
+    $sql="SELECT u.nom,a.content,a.note FROM avis a INNER JOIN users u ON a.id_user=u.id_user WHERE a.id_vehicule=:id";
+    $stm=$conn->prepare($sql);
+    $stm->execute([':id'=>$id]);
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public static function getNomVehiculeMarque($conn){
+    $sql = "
+        SELECT 
+            v.id_vehicule,
+            v.modele,
+            v.marque
+        FROM vehicules v
+    ";
+    $stm = $conn->prepare($sql);
+    $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 }
 
 

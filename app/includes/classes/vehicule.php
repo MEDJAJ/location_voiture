@@ -53,6 +53,39 @@ public static function getvehiculesParCategorie($conn,$id){
   $stm->execute([':id'=>$id]);
   return $stm->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public static function rechercheVehicules($conn, $marque,$id){
+    $sql = "SELECT * FROM vehicules WHERE marque LIKE :marque AND id_categorie=:id";
+    $stm = $conn->prepare($sql);
+    $stm->execute([':marque' => "%$marque%",':id'=>$id]); 
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+public static function getVehiculesParCategoriePaginated($conn, $id, $limit, $offset){
+    $sql = "SELECT * FROM vehicules 
+            WHERE id_categorie = :id 
+            LIMIT :limit OFFSET :offset";
+
+    $stm = $conn->prepare($sql);
+    $stm->bindValue(':id', $id, PDO::PARAM_INT);
+    $stm->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stm->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stm->execute();
+
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+public static function countVehiculesParCategorie($conn, $id){
+    $sql = "SELECT COUNT(*) FROM vehicules WHERE id_categorie = :id";
+    $stm = $conn->prepare($sql);
+    $stm->execute([':id' => $id]);
+    return $stm->fetchColumn();
+}
+
+
+
      
 
 }

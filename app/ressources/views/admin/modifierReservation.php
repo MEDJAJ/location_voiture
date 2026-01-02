@@ -11,7 +11,7 @@ if ($id == 0) {
 
 $reservation = Reservation::getReservationParId($conn, $id);
 if (!$reservation) {
-    die("Réservation non trouvée")
+    die("Réservation non trouvée");
 }
 
 

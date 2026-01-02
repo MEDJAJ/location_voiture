@@ -3,6 +3,8 @@ require_once '../../../includes/config.php';
 require_once '../../../includes/function.php';
 require_once '../../../includes/classes/Categorie.php';
 require_once '../../../includes/classes/vehicule.php';
+require_once '../../../includes/classes/reservation.php';
+require_once '../../../includes/classes/Avis.php';
 
 $id=isset($_GET['id']) ? $_GET['id'] : 0;
 if($id==0){
@@ -11,10 +13,33 @@ if($id==0){
 }
 
 $vehicules=Vehicle::getById($conn,$id);
+$sucess="";
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $lieuprice=trim($_POST['pricecharge']);
+    $datedebut=trim($_POST['datedebut']);
+      $datefin=trim($_POST['datefin']);
+
+      $reservation=new Reservation(
+        $datedebut,
+        $datefin,
+        $lieuprice,
+        'en attente',
+        "2",
+        $id
+      );
+
+      if($reservation->ajauterReservation($conn)){
+        $sucess="1";
+       header('Location: details.php?id=' . $id);
+      }else{
+        $sucess="0";
+      }
 
 
+}
 
 
+$avis=Avis::getAvisParVehicule($conn,$id);
 
 
 ?>
@@ -50,43 +75,80 @@ $vehicules=Vehicle::getById($conn,$id);
                 L'accélération la plus rapide de tous les véhicules en production aujourd'hui. Profitez d'une puissance de 1020 chevaux et d'un intérieur futuriste.
             </p>
 
+
             <div class="border-t pt-10">
                 <h2 class="text-2xl font-bold mb-8">Ce qu'en disent les clients</h2>
+                <?php if(count($avis)>0){
+           foreach($avis as $avi){
+
+         
+                ?>
                 <div class="space-y-6">
                     <div class="bg-white p-6 rounded-3xl border border-gray-100">
                         <div class="flex justify-between mb-4">
-                            <span class="font-bold">Sophie L.</span>
-                            <span class="text-yellow-400 font-bold">★★★★★</span>
+                            <span class="font-bold"><?= $avi['nom']?></span>
+                       
+                            <span class="text-yellow-400 font-bold">
+                            <?php
+                              if($avi['note']==1){
+                                echo "★";
+                              }elseif($avi['note']==2){
+                                echo"★★";
+                              }elseif($avi['note']==3){
+                                echo"★★★";
+                              }elseif($avi['note']==4){
+                                echo"★★★★";
+                              }else{
+                                echo"★★★★★";
+                              }
+                            ?>
+                            </span>
                         </div>
-                        <p class="text-gray-600 italic">"Incroyable. La voiture était propre, chargée à 100%. L'interface MaBagnole est top !"</p>
+                        <p class="text-gray-600 italic"><?= $avi['content'] ?></p>
                     </div>
                 </div>
+
+<?php   }  } ?>
+
             </div>
         </div>
 
+        
         <aside>
             <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-gray-50 sticky top-10">
-                <h3 class="text-2xl font-bold mb-8 italic">Réserver ce véhicule</h3>
-                <form action="#" class="space-y-5">
+                <?php if($sucess=="1"){
+
+               ?>
+                <h3 class="text-2xl font-bold mb-8 italic text-green-600">Réserver ce véhicule</h3>
+                <?php  }elseif($sucess=="0"){
+
+                ?>
+<h3 class="text-2xl font-bold mb-8 italic text-red-600">Réserver ce véhicule</h3>
+                <?php   }else{
+
+                 ?>
+<h3 class="text-2xl font-bold mb-8 italic ">Réserver ce véhicule</h3>
+                 <?php  }  ?>
+                <form action="#" class="space-y-5" method="POST">
                     <div>
                         <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Prise en charge</label>
-                        <input type="text" placeholder="Gare, Aéroport, Ville..." class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <input type="text" name="pricecharge" placeholder="Gare, Aéroport, Ville..." class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500 outline-none">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Début</label>
-                            <input type="date" class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none outline-none">
+                            <input type="date" name="datedebut" class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none outline-none">
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Fin</label>
-                            <input type="date" class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none outline-none">
+                            <input type="date" name="datefin" class="w-full mt-1 p-4 bg-gray-50 rounded-2xl border-none outline-none">
                         </div>
                     </div>
                     <div class="pt-6 border-t border-dashed my-6 flex justify-between items-center">
                         <span class="text-gray-400 font-bold">Prix Total</span>
                         <span class="text-4xl font-black text-indigo-600 underline"><?= $vehicules['prix'] ?>€</span>
                     </div>
-                    <button class="w-full bg-indigo-600 text-white py-5 rounded-[1.5rem] font-black text-xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all transform hover:scale-[1.02]">RESERVER</button>
+                    <button type="submit" name="reserve" class="w-full bg-indigo-600 text-white py-5 rounded-[1.5rem] font-black text-xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all transform hover:scale-[1.02]">RESERVER</button>
                 </form>
             </div>
         </aside>

@@ -1,3 +1,20 @@
+
+<?php
+
+require_once '../../../includes/config.php';
+require_once '../../../includes/function.php';
+require_once '../../../includes/classes/Categorie.php';
+require_once '../../../includes/classes/vehicule.php';
+require_once '../../../includes/classes/reservation.php';
+require_once '../../../includes/classes/Avis.php';
+
+
+$vehicules = Avis::getNomVehiculeMarque($conn);
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -47,10 +64,19 @@
         <div class="mt-20 bg-white p-10 rounded-[3rem] shadow-xl border border-gray-100">
             <h2 class="text-2xl font-bold mb-6">Ajouter un avis</h2>
             <form action="#" class="space-y-4">
-                <select class="w-full p-4 rounded-2xl bg-gray-50 border outline-none font-bold text-gray-500">
-                    <option>Sélectionnez un véhicule loué</option>
-                    <option>Tesla Model 3 - Loué le 12/12/2025</option>
-                </select>
+               <select name="id_vehicule" 
+        class="w-full p-4 rounded-2xl bg-gray-50 border outline-none font-bold text-gray-500">
+
+    <option value="">Sélectionnez un véhicule loué</option>
+
+    <?php foreach ($vehicules as $v): ?>
+        <option value="<?= $v['id_vehicule'] ?>">
+            <?= $v['modele'] ?> - <?= $v['marque'] ?>
+        </option>
+    <?php endforeach; ?>
+
+</select>
+
                 <textarea rows="4" placeholder="Racontez-nous votre trajet..." class="w-full p-4 rounded-2xl bg-gray-50 border focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
                 <div class="flex items-center gap-4">
                     <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Note :</span>

@@ -7,9 +7,10 @@ class Reservation{
     private $date_fin;
     private $lieu_prise;
     private $status;
+    private $id_user;
+    private $id_vehicule;
 
-
-    public function __construct($date_debut,$date_fin,$lieu_prise,$status){
+    public function __construct($date_debut,$date_fin,$lieu_prise,$status,$id_user,$id_vehicule){
         $this->date_dabut=$date_debut;
         $this->date_fin=$date_fin;
         $this->lieu_price=$lieu_prise;
