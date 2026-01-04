@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 require_once '../../../includes/config.php';
 require_once '../../../includes/function.php';
 require_once '../../../includes/classes/Categorie.php';
@@ -48,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $categories=Categorie::afficherCategories($conn);
+
+$nom=$_SESSION['nom'];
 
 ?>
 
@@ -111,10 +115,13 @@ $categories=Categorie::afficherCategories($conn);
     </div>
 
     <div class="mt-auto p-6 border-t border-white/10">
-        <button class="flex items-center gap-4 w-full p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300">
+        <a href="../logout.php">
+             <button class="flex items-center gap-4 w-full p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300">
             <i class="fas fa-sign-out-alt"></i>
             <span class="font-bold uppercase text-xs tracking-widest">Déconnexion</span>
         </button>
+        </a>
+       
     </div>
 </aside>
 
@@ -130,7 +137,7 @@ $categories=Categorie::afficherCategories($conn);
                 <span class="text-xs font-bold text-slate-400 uppercase">Total catégories</span>
                 <p class="text-xl font-bold text-indigo-600"><?= count($categories) ?></p>
             </div>
-            <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" class="w-10 h-10 rounded-full border-2 border-white shadow-sm">
+           <button class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 font-bold"><?= $nom[0].$nom[1]  ?></button>
         </div>
     </header>
 

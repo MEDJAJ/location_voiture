@@ -31,6 +31,14 @@ class Client extends User{
         );
 
   }
+
+
+  public static function countClient($conn){
+    $sql="SELECT * FROM users Where role='client' ";
+    $stm=$conn->prepare($sql);
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+  } 
 }
 
 

@@ -21,8 +21,7 @@ class Reservation{
 
 
     public function ajauterReservation($conn){
-        $sql="INSERT INTO reservations(dateDebut,dateFin,lieuPrise,status,id_user,id_vehicule)
-        VALUES (:dateDebut,:dateFin,:lieuPrise,:status,:id_user,:id_vehicule)
+        $sql="CALL AjouterReservation(:dateDebut,:dateFin,:lieuPrise,:status,:id_user,:id_vehicule)
         ";
          $stm=$conn->prepare($sql);
         return $stm->execute([
@@ -78,6 +77,31 @@ class Reservation{
             ':id'=>$id
         ]);
     }
+
+
+
+
+
+    
+
+
+public static function countReservations($conn){
+    $stm=$conn->prepare("SELECT * FROM reservations");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
+
+public static function countReservationsConfirme($conn){
+    $stm=$conn->prepare("SELECT * FROM reservations where status='confirmée'");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
+
+public static function countReservationsEnAttente($conn){
+    $stm=$conn->prepare("SELECT * FROM reservations where status='en attente'");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
 
 
 

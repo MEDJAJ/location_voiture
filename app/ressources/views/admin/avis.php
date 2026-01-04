@@ -1,10 +1,11 @@
 <?php
+session_start();
 require_once '../../../includes/config.php';
 require_once '../../../includes/classes/avis.php';
 
 
 $avis=Avis::afficherAvis($conn);
-
+$nom=$_SESSION['nom'];
 
 ?>
 
@@ -73,10 +74,13 @@ $avis=Avis::afficherAvis($conn);
     </div>
 
     <div class="mt-auto p-6 border-t border-white/10">
-        <button class="flex items-center gap-4 w-full p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300">
+        <a href="../auth/logout.php">
+               <button class="flex items-center gap-4 w-full p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300">
             <i class="fas fa-sign-out-alt"></i>
             <span class="font-bold uppercase text-xs tracking-widest">Déconnexion</span>
         </button>
+        </a>
+     
     </div>
 </aside>
 
@@ -95,7 +99,7 @@ $avis=Avis::afficherAvis($conn);
                     <span class="ml-2 text-slate-800 font-bold">4.8/5</span>
                 </div>
             </div>
-            <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" class="w-10 h-10 rounded-full border-2 border-white shadow-md">
+              <button class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 font-bold"><?= $nom[0].$nom[1]  ?></button>
         </div>
     </header>
 
@@ -246,9 +250,9 @@ echo "⭐";
     </div>
 
     <div class="flex md:flex-col gap-2 opacity-100 pointer-events-auto">
-        <a href="supprimer_avi.php?id=<?=  $avi['id_avis'] ?>">
+        <a href="récuperer_avi.php?id=<?=  $avi['id_avis'] ?>">
                <button title="Supprimer" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-            <i class="fas fa-trash-alt text-sm"></i>
+            <i class="fas fa-eye text-lg"></i>
         </button>
         </a>
      

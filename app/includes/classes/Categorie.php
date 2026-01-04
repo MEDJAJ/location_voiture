@@ -79,6 +79,28 @@ public static function getNomCparId($conn,$id){
     $stm->execute([$id]);
     return $stm->fetch(PDO::FETCH_ASSOC);
 }
+
+
+
+
+public static function countCategorie($conn){
+    $stm=$conn->prepare("SELECT * FROM categories");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
+
+public static function countCategorieDisponble($conn){
+    $stm=$conn->prepare("SELECT * FROM categories where status='1'");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
+
+public static function countCategorieIndisponible($conn){
+    $stm=$conn->prepare("SELECT * FROM categories where status='0'");
+    $stm->execute();
+    return count($stm->fetchAll(PDO::FETCH_ASSOC));
+}
+
 }
 ?>
 

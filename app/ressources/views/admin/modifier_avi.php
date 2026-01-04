@@ -67,8 +67,8 @@ if (isset($_POST['modifier'])) {
     <div class="mb-6">
         <label class="block text-sm font-bold text-slate-700 mb-1">Statut</label>
         <select name="deleted_at" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
-            <option value="0" <?= $avi['deleted_at']==1 ? 'selected' : '' ?>>Visible</option>
-            <option value="1" <?= $avi['deleted_at']==0 ? 'selected' : '' ?>>Masqué</option>
+            <option value="1" <?= $avi['deleted_at']==1 ? 'selected' : '' ?>>Visible</option>
+            <option value="0" <?= $avi['deleted_at']==0 ? 'selected' : '' ?>>Masqué</option>
         </select>
     </div>
 

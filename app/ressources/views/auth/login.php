@@ -24,7 +24,7 @@ $password=trim($_POST['password']);
         if($user===true){
             $role=$_SESSION['role'];
             switch($role){
-                case 'client': header('Location: ../client/home.php'); 
+                case 'client': header('Location: ../client/categorie.php'); 
                 break;
                 case 'admin': header('Location: ../admin/Statistiques.php');
                  break;

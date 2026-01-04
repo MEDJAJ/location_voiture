@@ -15,14 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = $_POST['nom'];
     $description = $_POST['description'];
     $status = $_POST['status'];
-    $imageName = $cat['image']; // conserver l'ancienne image par défaut
+    $imageName = $cat['image']; 
 
     if (!empty($_FILES['image']['name'])) {
         $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $imageName = uniqid() . '.' . $extension;
         move_uploaded_file($_FILES['image']['tmp_name'], "../../../assets/uploads/".$imageName);
 
-        // Supprimer l'ancienne image
+       
         if (!empty($cat['image']) && file_exists('../../../assets/uploads/'.$cat['image'])) {
             unlink('../../../assets/uploads/'.$cat['image']);
         }

@@ -22,9 +22,12 @@ class Avis{
 
 
     public static function supprimerAvi($conn,$id){
-        $sql="DELETE FROM avis WHERE id_avis=:id";
-        $stm=$conn->prepare($sql);
-       return $stm->execute([':id'=>$id]);
+       $sql="UPDATE avis SET deleted_at=:deleted WHERE id_avis=:id";
+    $stm=$conn->prepare($sql);
+    return $stm->execute([
+        ':deleted'=>"0",
+        ':id'=>$id
+    ]);
         
     }
 
@@ -39,7 +42,7 @@ class Avis{
 public function modifierAvis($conn,$id){
      $sql = "UPDATE avis SET note = :note, content = :content, deleted_at = :deleted_at WHERE id_avis = :id";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([
+   return $stmt->execute([
         ':note'       => $this->note,
         ':content'    => $this->content,
         ':deleted_at' => $this->delete_at,
@@ -48,7 +51,7 @@ public function modifierAvis($conn,$id){
 }
 
 public static function getAvisParVehicule($conn,$id){
-    $sql="SELECT u.nom,a.content,a.note FROM avis a INNER JOIN users u ON a.id_user=u.id_user WHERE a.id_vehicule=:id";
+    $sql="SELECT u.nom,a.content,a.note,a.id_user,a.deleted_at FROM avis a INNER JOIN users u ON a.id_user=u.id_user WHERE a.id_vehicule=:id AND a.deleted_at='1'";
     $stm=$conn->prepare($sql);
     $stm->execute([':id'=>$id]);
     return $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -67,6 +70,50 @@ public static function getNomVehiculeMarque($conn){
     return $stm->fetchAll(PDO::FETCH_ASSOC);
 }
 
+public function ajauterAvis($conn,$id_user,$id_vehecule){
+    $sql="INSERT INTO avis(note,content,deleted_at,id_user,id_vehicule)
+    VALUES(:note,:content,:deleted_at,:id_user,:id_vehicule)
+    ";
+    $stm=$conn->prepare($sql);
+  return  $stm->execute([
+        ':note'=> $this->note,
+        ':content'=> $this->content,
+        ':deleted_at'=>$this->delete_at,
+        ':id_user'=>$id_user,
+        ':id_vehicule'=>$id_vehecule
+    
+  ]);
+}
+
+public static function getAvisParUser($conn,$id_user){
+    $sql="SELECT v.modele,v.marque,a.content,a.note,a.deleted_at,a.id_avis,v.image FROM avis a INNER JOIN vehicules v ON v.id_vehicule=a.id_vehicule WHERE id_user=:id";
+    $stm=$conn->prepare($sql);
+    $stm->execute([':id'=>$id_user]);
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+public static function modifierdeleteAt($conn,$id_avis){
+    $sql="UPDATE avis SET deleted_at=:deleted WHERE id_avis=:id";
+    $stm=$conn->prepare($sql);
+    return $stm->execute([
+        ':deleted'=>"1",
+        ':id'=>$id_avis
+    ]);
+}
+
+
+
+
+ public static function voirAvi($conn,$id){
+       $sql="UPDATE avis SET deleted_at=:deleted WHERE id_avis=:id";
+    $stm=$conn->prepare($sql);
+    return $stm->execute([
+        ':deleted'=>"1",
+        ':id'=>$id
+    ]);
+        
+    }
 
 }
 

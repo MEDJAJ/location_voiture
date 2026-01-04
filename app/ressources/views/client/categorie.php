@@ -1,9 +1,11 @@
 
 <?php
+session_start();
 require_once '../../../includes/config.php';
 require_once '../../../includes/function.php';
 require_once '../../../includes/classes/Categorie.php';
 
+$nom=$_SESSION['nom'];
 $categories=Categorie::afficherCategories($conn); 
 if(count($categories)==0){
 echo "aucun categorie";
@@ -29,7 +31,7 @@ exit;
             <a href="categorie.php" class="text-indigo-600">Nos Catégories</a>
             <a href="mes_avis.php" class="hover:text-indigo-600">Mes Avis</a>
         </div>
-        <button class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 font-bold">JD</button>
+        <button class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 font-bold"><?= $nom[0].$nom[1]  ?></button>
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 py-12">

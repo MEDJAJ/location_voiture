@@ -3,9 +3,7 @@ require_once '../../../includes/config.php';
 require_once '../../../includes/classes/vehicule.php';
 require_once '../../../includes/classes/Categorie.php';
 
-/* =========================
-   1️⃣ Vérification ID
-========================= */
+
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: vehicules.php');
     exit;
@@ -13,9 +11,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = (int) $_GET['id'];
 
-/* =========================
-   2️⃣ Récupération données
-========================= */
+
 $vehicule = Vehicle::getById($conn, $id);
 $categories = Categorie::getNamesC($conn);
 
@@ -24,9 +20,7 @@ if (!$vehicule) {
     exit;
 }
 
-/* =========================
-   3️⃣ Traitement formulaire
-========================= */
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $modele = $_POST['modele'];
@@ -35,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $disponibilite = $_POST['disponible'];
     $id_categorie = $_POST['categorie'];
 
-    // Image existante par défaut
+   
     $imageName = $vehicule['image'];
 
-    // Nouvelle image ?
+  
     if (!empty($_FILES['image']['name'])) {
         $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $imageName = uniqid() . '.' . $extension;
@@ -48,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
     }
 
-    // Mise à jour
+
     Vehicle::modifierVehicule( 
         $conn,
         $id,
@@ -83,28 +77,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <!-- Modèle -->
+  
         <div>
             <label class="text-sm font-semibold">Modèle</label>
             <input name="modele" value="<?= htmlspecialchars($vehicule['modele']) ?>"
                    class="w-full border p-3 rounded-xl">
         </div>
 
-        <!-- Marque -->
+     
         <div>
             <label class="text-sm font-semibold">Marque</label>
             <input name="marque" value="<?= htmlspecialchars($vehicule['marque']) ?>"
                    class="w-full border p-3 rounded-xl">
         </div>
 
-        <!-- Prix -->
+    
         <div>
             <label class="text-sm font-semibold">Prix journalier (€)</label>
             <input name="prix" type="number" value="<?= $vehicule['prix'] ?>"
                    class="w-full border p-3 rounded-xl">
         </div>
 
-        <!-- Disponibilité -->
+      
         <div>
             <label class="text-sm font-semibold">Disponibilité</label>
             <select name="disponible" class="w-full border p-3 rounded-xl">
@@ -117,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
         </div>
 
-        <!-- Catégorie -->
+      
         <div>
             <label class="text-sm font-semibold">Catégorie</label>
             <select name="categorie" class="w-full border p-3 rounded-xl">
@@ -130,13 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
         </div>
 
-        <!-- Image -->
+   
         <div>
             <label class="text-sm font-semibold">Image</label>
             <input type="file" name="image" class="w-full border p-2 rounded-xl">
         </div>
 
-        <!-- Boutons -->
+       
         <div class="md:col-span-2 flex justify-between mt-6">
             <a href="vehicules.php"
                class="bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-bold">
